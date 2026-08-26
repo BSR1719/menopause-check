@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSR Menopause Check — แบบประเมินความจำเป็นในการพบแพทย์</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     BSR BRAND — DO NOT CHANGE unless directed by user.
+     Navy #0a2878 and Red #b01828 are from the BSR logo pixels.
+     Full brand rationale in references/brand-guide.md
+  ============================================================ */
+  :root{
+    --navy:#0a2878;
+    --teal:#1a3a8c;         /* navy-mid — kept var name for minimal refactor */
+    --teal-2:#2a4ea0;       /* navy-light */
+    --ink:#18254a;
+    --brand-red:#b01828;
+    --brand-red-2:#8a1220;
+    --muted:#5d6a85;
+    --line:#dde3ed;
+    --bg:#eff2f8;
+    --card:#ffffff;
+    --low:#2f8f6b;   --low-bg:#e7f4ee;
+    --mod:#c6871a;   --mod-bg:#fbf2dd;
+    --high:#b01828;  --high-bg:#fbe5e7;
+    --accent:#b01828;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(10,40,120,.06),0 8px 28px rgba(10,40,120,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'IBM Plex Sans Thai',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(42,78,160,.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(10,40,120,.07), transparent 55%),
+      var(--bg);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 16px 64px}
+
+  /* HEADER */
+  header{
+    background:linear-gradient(135deg,var(--navy),var(--teal-2));
+    color:#fff;border-radius:0 0 26px 26px;
+    padding:26px 96px 30px 22px;margin-bottom:20px;
+    box-shadow:0 14px 40px rgba(10,40,120,.22);
+    position:relative;overflow:hidden;
+  }
+  header::after{
+    content:"";position:absolute;right:-40px;top:-40px;width:220px;height:220px;
+    background:radial-gradient(circle,rgba(255,255,255,.10),transparent 70%);
+  }
+  .badge{display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    background:rgba(255,255,255,.16);padding:5px 12px;border-radius:99px;font-weight:600;margin-bottom:12px}
+  header h1{font-family:'Anuphan',sans-serif;font-weight:700;font-size:25px;margin:0 0 6px;line-height:1.25}
+  header .sub{opacity:.9;font-size:14px;margin:0;max-width:560px}
+  header .guideline-cite{margin:12px 0 0;padding:10px 14px;background:rgba(255,255,255,.13);border-left:3px solid #9bc2ff;
+    border-radius:8px;color:#fff;font-size:12.5px;line-height:1.6;max-width:720px}
+  header .guideline-cite b{color:#cfe0ff}
+  header .cite-list{margin:6px 0 0;padding-left:22px;color:#fff}
+  header .cite-list li{margin:4px 0;font-size:12px;line-height:1.55}
+  .privacy-block{margin-top:16px;background:rgba(255,255,255,.13);border-left:3px solid #ffd76b;
+    padding:14px 16px;border-radius:8px;color:#fff;font-size:13.5px;line-height:1.65}
+  .privacy-block b{color:#ffe09a}
+  .save-reminder{background:#fff8e8;border-left:4px solid #d39a23;padding:12px 14px;
+    border-radius:8px;margin-bottom:12px;font-size:14px;color:#1a2542;line-height:1.55}
+  .save-reminder b{color:#92400e}
+  @media print{.save-reminder,.privacy-block{display:none !important}}
+  .disclaimer{margin-top:16px;font-size:12.5px;background:rgba(255,255,255,.12);
+    border-left:3px solid rgba(255,255,255,.6);padding:9px 12px;border-radius:8px}
+
+  /* CARDS / SECTIONS */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 18px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .sec-head{display:flex;align-items:center;gap:11px;margin:0 0 4px}
+  .sec-num{flex:0 0 30px;height:30px;border-radius:9px;background:var(--teal);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Anuphan';font-size:15px}
+  .sec-head h2{font-family:'Anuphan';font-size:17px;margin:0;font-weight:600;color:var(--navy)}
+  .sec-desc{font-size:13px;color:var(--muted);margin:2px 0 16px 41px}
+  .optional-tag{font-size:11px;font-weight:600;color:var(--teal-2);background:#e3f0f2;
+    padding:2px 9px;border-radius:99px;margin-left:6px}
+
+  /* FORM CONTROLS */
+  label.fld{display:block;margin-bottom:14px}
+  label.fld > span{display:block;font-size:13.5px;font-weight:500;margin-bottom:6px;color:var(--ink)}
+  .hint{font-weight:400!important;color:var(--muted);font-size:12px!important}
+  input[type=number],input[type=text],select{
+    width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;
+    font-family:inherit;font-size:15px;color:var(--ink);background:#fbfdfd;transition:.15s;
+  }
+  input:focus,select:focus{outline:none;border-color:var(--teal-2);background:#fff;
+    box-shadow:0 0 0 3px rgba(28,112,128,.12)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 12px}
+  .input-with-unit{display:flex;gap:6px;align-items:stretch}
+  .input-with-unit input{flex:1;min-width:0}
+  .unit-select{flex:0 0 auto;width:88px;padding:11px 10px;border:1.5px solid var(--line);
+    border-radius:11px;background:#fbfdfd;font-family:inherit;font-size:14px;color:var(--ink);cursor:pointer}
+
+  /* SEGMENTED CONTROL */
+  .seg{display:flex;gap:8px;flex-wrap:wrap}
+  .seg input{position:absolute;opacity:0;pointer-events:none}
+  .seg label{flex:1;min-width:90px;text-align:center;padding:10px 8px;border:1.5px solid var(--line);
+    border-radius:11px;font-size:14px;cursor:pointer;background:#fbfdfd;transition:.15s;user-select:none}
+  .seg input:checked + label{border-color:var(--teal-2);background:var(--teal);color:#fff;font-weight:600}
+  .seg.seg-4 label{flex:1 1 calc(50% - 4px);min-width:120px}
+  @media (min-width:600px){.seg.seg-4 label{flex:1 1 0;min-width:0}}
+
+  /* CHECKBOX CHIPS */
+  .chips{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .chip{display:flex;align-items:flex-start;gap:9px;padding:11px 12px;border:1.5px solid var(--line);
+    border-radius:11px;cursor:pointer;font-size:13.5px;background:#fbfdfd;transition:.15s;line-height:1.35}
+  .chip input{margin:2px 0 0;width:17px;height:17px;accent-color:var(--teal);flex:0 0 auto}
+  .chip:has(input:checked){border-color:var(--teal-2);background:#e9f3f4}
+  .chip small{display:block;color:var(--muted);font-size:11.5px}
+
+  .alert-acute{border:1.5px solid #f0b6a6;background:var(--high-bg);border-radius:12px;
+    padding:13px 14px;margin-top:12px;font-size:13.5px;display:none}
+  .alert-acute.show{display:block}
+  .alert-acute b{color:var(--high)}
+
+  /* Lab toggle card — the "I have lab results" pattern */
+  .lab-toggle-card{background:#fff8e8;border-left:4px solid #d39a23;padding:14px 16px;margin-bottom:14px}
+  .lab-toggle-label{display:flex;align-items:flex-start;gap:12px;cursor:pointer;margin:0}
+  .lab-toggle-label input{margin:4px 0 0 0;width:18px;height:18px;cursor:pointer;flex-shrink:0;accent-color:#0a2878}
+  .lab-toggle-text b{display:block;color:var(--navy);font-size:15px;font-weight:600;margin-bottom:4px;font-family:'Anuphan'}
+  .lab-toggle-text span{display:block;color:var(--muted);font-size:13px;line-height:1.6}
+
+  /* BUTTONS */
+  .btn-row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+  button{font-family:inherit;cursor:pointer;border:none;font-weight:600;font-size:15px;border-radius:12px;transition:.15s}
+  .btn-primary{flex:1;min-width:200px;background:linear-gradient(135deg,var(--teal),var(--teal-2));
+    color:#fff;padding:15px 20px;box-shadow:0 8px 20px rgba(10,40,120,.28)}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(10,40,120,.34)}
+  .btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--teal);padding:15px 20px}
+  .btn-ghost:hover{border-color:var(--teal-2);background:#f4f8f9}
+
+  /* RESULT — banner + res blocks */
+  #result{display:none;scroll-margin-top:14px}
+  .res-banner{border-radius:18px;padding:22px;color:#fff;margin-bottom:16px;box-shadow:var(--shadow)}
+  .res-banner.low,.res-banner.green{background:linear-gradient(135deg,#247a5b,#2f8f6b)}
+  .res-banner.mod,.res-banner.yellow{background:linear-gradient(135deg,#b07410,#d39a23)}
+  .res-banner.high,.res-banner.orange{background:linear-gradient(135deg,#8a1220,#b01828)}
+  .res-banner.emerg,.res-banner.red{background:linear-gradient(135deg,#6a0a18,#8a1220)}
+  .res-banner .lvl{font-family:'Anuphan';font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.92;margin:0 0 4px;font-weight:600}
+  .res-banner .lvl-big{font-family:'Anuphan';font-size:27px;font-weight:700;margin:0 0 8px}
+  .res-banner p{margin:0;font-size:14px;opacity:.96}
+  .pkg-pill{display:inline-block;background:rgba(255,255,255,.2);padding:7px 14px;border-radius:99px;font-weight:600;margin-top:12px;font-size:14px}
+  .ref-id{display:inline-block;background:rgba(255,255,255,.18);padding:4px 11px;border-radius:7px;
+    font-family:'Anuphan';font-size:12px;letter-spacing:.04em;margin-top:12px;color:#fff}
+
+  .res-block{margin-bottom:16px}
+  .res-block h3{font-family:'Anuphan';font-size:15.5px;color:var(--navy);margin:0 0 10px;
+    display:flex;align-items:center;gap:8px}
+  .res-block h3::before{content:"";width:6px;height:18px;border-radius:3px;background:var(--teal-2)}
+  ul.clean{list-style:none;margin:0;padding:0}
+  ul.clean li{padding:9px 0 9px 26px;border-bottom:1px solid var(--line);font-size:14px;position:relative}
+  ul.clean li:last-child{border-bottom:none}
+  ul.clean li::before{content:"";position:absolute;left:4px;top:15px;width:7px;height:7px;border-radius:50%;background:var(--teal-2)}
+  ul.clean li.warn::before{background:var(--high)}
+  ul.clean li.ok::before{background:var(--low)}
+  ul.clean li b{color:var(--navy)}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-left:6px}
+  .tag.n{background:var(--low-bg);color:var(--low)}
+  .tag.a{background:var(--high-bg);color:var(--high)}
+  .tag.b{background:var(--mod-bg);color:var(--mod)}
+  .muted-row{color:var(--muted);font-size:13px}
+  .pt-conc{background:var(--low-bg);border:1px solid #cfe7dc;border-radius:12px;padding:14px 16px;font-size:13.5px;color:#1f5e47}
+
+  /* Patient summary card (shown on screen + print) */
+  .patient-summary h3{font-family:'Anuphan';font-size:15.5px;color:var(--navy);margin:0 0 12px;
+    display:flex;align-items:center;gap:8px}
+  .patient-summary h3::before{content:"";width:6px;height:18px;border-radius:3px;background:var(--teal-2)}
+  .ps-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 20px;font-size:14px;margin-bottom:12px}
+  .ps-grid > div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:5px 0}
+  .ps-grid .k{color:var(--muted);font-size:13px}
+  .ps-grid .v{font-weight:600;color:var(--navy);text-align:right}
+  .ps-sub{margin-top:10px}
+  .ps-sub h4{font-family:'Anuphan';font-size:13.5px;color:var(--navy);margin:10px 0 7px;font-weight:600}
+  .ps-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .ps-tag{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:5px 11px;font-size:12.5px}
+  .ps-empty{color:var(--muted);font-size:13px;font-style:italic}
+  @media(max-width:560px){.ps-grid{grid-template-columns:1fr}}
+
+  /* BSR logo — appears on screen (badge, top-right of header) + PDF (large, header-left) */
+  .brand-logo{display:block;background:#fff;border-radius:10px;padding:6px 9px;box-shadow:0 2px 8px rgba(10,40,120,.18)}
+  .brand-logo img{display:block;height:44px;width:auto}
+  header .brand-logo{position:absolute;top:18px;right:18px}
+  @media(max-width:560px){
+    header .brand-logo img{height:38px}
+    header .brand-logo{top:14px;right:14px;padding:5px 7px}
+    .grid,.grid-3,.chips{grid-template-columns:1fr}
+    header{padding:22px 76px 26px 18px}
+    header h1{font-size:22px}
+  }
+
+  /* PRINT-ONLY BLOCKS (header, contact, footer) */
+  .no-screen{display:none}
+  .print-header{border-bottom:2.5px solid var(--brand-red);padding-bottom:12px;margin-bottom:16px;
+    display:flex;justify-content:space-between;align-items:center;gap:18px}
+  .ph-logo img{display:block;height:54px;width:auto}
+  .ph-brand{flex:1}
+  .ph-brand .hosp{font-family:'Anuphan';font-size:17px;font-weight:700;color:var(--navy);margin:0}
+  .ph-brand .doctitle{font-family:'Anuphan';font-size:14px;color:var(--ink);margin:4px 0 0;line-height:1.4}
+  .ph-meta{font-size:11.5px;color:var(--muted);text-align:right;white-space:nowrap;line-height:1.6}
+  .ph-meta b{color:var(--navy);font-weight:600}
+  .print-contact{border:1px solid var(--line);border-radius:10px;padding:13px 16px;
+    margin-top:14px;margin-bottom:10px;background:#f4f8f9;font-size:13px;line-height:1.8}
+  .print-contact b{color:var(--navy);font-weight:600}
+  .print-footer{font-size:10.5px;color:var(--muted);text-align:center;line-height:1.6;
+    border-top:1px solid var(--line);padding-top:10px;margin-top:14px}
+
+  /* PDF rendering mode — for html2pdf.js (Web Share API path) */
+  .pdf-rendering .no-print{display:none !important}
+  .pdf-rendering .no-screen,
+  .pdf-rendering .print-header,
+  .pdf-rendering .print-contact,
+  .pdf-rendering .print-footer{display:block !important}
+  .pdf-rendering #result{display:block !important;max-width:760px !important;width:760px !important;margin:0 auto !important;padding:0 !important}
+  .pdf-rendering form,
+  .pdf-rendering header,
+  .pdf-rendering .btn-row,
+  .pdf-rendering .save-reminder,
+  .pdf-rendering .privacy-block{display:none !important}
+  .pdf-rendering .card,
+  .pdf-rendering .res-banner,
+  .pdf-rendering .print-contact,
+  .pdf-rendering .print-footer{break-inside:avoid;page-break-inside:avoid}
+  /* Thai glyph overlap fix — Tahoma (system font, always loaded) + generous line-height */
+  .pdf-rendering .pt-conc,
+  .pdf-rendering .print-footer,
+  .pdf-rendering .print-contact{font-family:'Tahoma','Sarabun',sans-serif !important;line-height:1.85 !important}
+  .pdf-rendering .print-header{flex-direction:row !important;flex-wrap:wrap !important;align-items:flex-start !important;gap:14px !important}
+  .pdf-rendering .ph-meta{text-align:left !important;white-space:normal !important;width:auto !important;margin-left:auto}
+
+  /* @media print — for browser native print (window.print()) */
+  @media print{
+    @page{margin:14mm 12mm}
+    *{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+    html,body{background:#fff !important;font-size:11.5pt}
+    .wrap{max-width:none;padding:0;margin:0}
+    header,form,.btn-row,.no-print,.contact-card,.contact-soft,.alert-acute,.lab-note{display:none !important}
+    .no-screen{display:block !important}
+    #result{display:block !important}
+    .card{box-shadow:none;border:1px solid #d0d7da;padding:14px 16px;margin-bottom:10px;
+      break-inside:avoid;page-break-inside:avoid;border-radius:10px}
+    .res-banner{box-shadow:none;border-radius:10px;padding:16px 18px;margin-bottom:12px;break-inside:avoid;page-break-inside:avoid}
+    .res-banner .lvl-big{font-size:22px}
+    .res-block{break-inside:avoid;page-break-inside:avoid;margin-bottom:11px}
+    .pt-conc{font-size:12px;padding:11px 13px}
+    a{color:inherit;text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="brand-logo no-print"><img alt="BSR" id="brandLogo"></div>
+    <span class="badge">Bangkok Hospital Surat · Women's Health</span>
+    <h1>แบบประเมินความจำเป็นในการพบแพทย์ (Menopause Check)</h1>
+    <p class="sub">BSR Menopause Check — ประเมินความจำเป็นและความเร่งด่วนในการพบแพทย์ สำหรับผู้หญิงในช่วงเปลี่ยนผ่านวัยทอง</p>
+
+    <div class="guideline-cite">
+      📖 <b>อ้างอิงเกณฑ์:</b>
+      <ol class="cite-list">
+        <li>NICE NG23 Menopause: identification and management (updated April 2026)</li>
+        <li>ACOG Updated Guidance on Evaluation of Postmenopausal Bleeding (April 2026)</li>
+        <li>NAMS 2022 Hormone Therapy Position Statement + 2023 Nonhormone Therapy Position Statement</li>
+        <li>USPSTF Osteoporosis Screening Final Recommendation (January 2025)</li>
+        <li>WHO Menopause Fact Sheet (October 2024)</li>
+      </ol>
+    </div>
+
+    <div class="privacy-block">
+      🔒 <b>ความเป็นส่วนตัว:</b> ระบบนี้ <u>ไม่เก็บข้อมูลส่วนตัว</u> (ชื่อ, เบอร์, ผลตรวจรายบุคคล) ทุกอย่างประมวลผลในเบราว์เซอร์ของท่าน<br>
+      📊 ระบบเก็บเฉพาะ <b>สถิติรวมที่ไม่ระบุตัวบุคคล</b> (ช่วงอายุ, ระดับความเร่งด่วน) เพื่อพัฒนาบริการเท่านั้น<br>
+      💾 <b>เมื่อทำเสร็จ กรุณากด "พิมพ์/PDF" เพื่อเก็บผลไว้</b> — ระบบไม่ได้บันทึกผลให้ ปิดเบราว์เซอร์แล้วข้อมูลจะหาย
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ แบบประเมินนี้ใช้เพื่อ <b>จัดระดับความเร่งด่วนในการพบแพทย์</b> เท่านั้น
+      <u>ไม่ใช่การวินิจฉัยภาวะหมดประจำเดือน</u> และ<u>ไม่สามารถสรุปได้ว่าควรใช้หรือไม่ใช้ฮอร์โมน</u>
+      หากมีอาการฉุกเฉิน (เจ็บหน้าอก หายใจลำบาก หมดสติ แขนขาอ่อนแรง คิดทำร้ายตนเอง) โปรดโทร <b>1669</b> หรือไปห้องฉุกเฉินทันที
+    </div>
+  </header>
+
+  <!-- ==================== FORM ==================== -->
+  <form id="form">
+
+    <!-- Section 1: Basic info + menstrual status -->
+    <div class="card">
+      <div class="sec-head"><div class="sec-num">1</div><h2>ข้อมูลพื้นฐาน</h2></div>
+      <p class="sec-desc">ช่วยแนะนำเส้นทางที่เหมาะกับช่วงชีวิตของคุณ (เช่น อาการก่อนอายุ 45 ปีมีเส้นทางเฉพาะ)</p>
+
+      <div class="grid">
+        <label class="fld"><span>อายุ (ปี) <b style="color:var(--high)">*</b></span>
+          <input type="number" id="age" min="0" max="120" placeholder="เช่น 48"></label>
+
+        <label class="fld"><span>ประจำเดือนครั้งสุดท้ายเมื่อใด</span>
+          <select id="lmp">
+            <option value="">— เลือก —</option>
+            <option value="current">ยังมาอยู่</option>
+            <option value="1-3m">1–3 เดือนที่แล้ว</option>
+            <option value="4-11m">4–11 เดือนที่แล้ว</option>
+            <option value="12m+">12 เดือนขึ้นไป (หมดประจำเดือน)</option>
+            <option value="unknown">ไม่ทราบ / จำไม่ได้</option>
+          </select></label>
+      </div>
+
+      <label class="fld"><span>ใน 12 เดือนที่ผ่านมา รอบเดือนของคุณเปลี่ยนแปลงหรือไม่</span>
+        <select id="cycle">
+          <option value="">— เลือก —</option>
+          <option value="no_change">ไม่เปลี่ยน / ตามปกติ</option>
+          <option value="irregular">มา ๆ ขาด ๆ ไม่สม่ำเสมอ</option>
+          <option value="heavy_long">มามากขึ้นหรือนานขึ้น</option>
+          <option value="stopped">ไม่มีประจำเดือน</option>
+          <option value="na">ไม่มีมดลูก / ไม่มีประจำเดือนเดิมอยู่แล้ว</option>
+        </select></label>
+
+      <label class="fld"><span>ประวัติผ่าตัด</span>
+        <select id="surgery">
+          <option value="">— เลือก —</option>
+          <option value="none">ไม่เคยผ่าตัด</option>
+          <option value="hyster">ตัดมดลูก</option>
+          <option value="oopho_1">ตัดรังไข่ข้างเดียว</option>
+          <option value="oopho_both">ตัดรังไข่สองข้าง</option>
+          <option value="hyster_oopho_both">ตัดมดลูกและรังไข่สองข้าง</option>
+          <option value="unknown">ไม่แน่ใจ</option>
+        </select></label>
+
+      <div class="chips" id="hist" style="margin-top:6px">
+        <label class="chip"><input type="checkbox" value="chemo_rad"><span>เคยรับเคมีบำบัด/ฉายรังสี ที่ทำให้ประจำเดือนหยุด<small>Induced menopause</small></span></label>
+        <label class="chip"><input type="checkbox" value="hormone_meds"><span>ใช้ฮอร์โมน / ยาคุม / ยาที่มีผลต่อประจำเดือน<small>Current hormonal medication</small></span></label>
+        <label class="chip"><input type="checkbox" value="preg_concern"><span>ยังมีโอกาสตั้งครรภ์ หรืออยากปรึกษาเรื่องคุมกำเนิด<small>Contraception need</small></span></label>
+      </div>
+    </div>
+
+    <!-- Section 2: RED FLAGS — Safety Gate -->
+    <div class="card" style="border-color:#f0b6a6;background:#fef7f5">
+      <div class="sec-head"><div class="sec-num" style="background:var(--high)">⚠</div><h2 style="color:var(--high)">สัญญาณอันตราย (Safety Check)</h2></div>
+      <p class="sec-desc" style="color:var(--high)">สำคัญมาก — โปรดตรวจสอบทีละข้อ ถ้ามีข้อใดตรงกับคุณ ระบบจะแนะนำเส้นทางเร่งด่วนทันที</p>
+
+      <div class="chips" id="redflags" style="grid-template-columns:1fr">
+        <label class="chip"><input type="checkbox" value="R01" id="R01"><span><b>R01</b> — หลังไม่มีประจำเดือนครบ 12 เดือน มีเลือด/เลือดกะปริดกะปรอยออกทางช่องคลอด<small>Postmenopausal bleeding (ACOG 2026)</small></span></label>
+        <label class="chip"><input type="checkbox" value="R02" id="R02"><span><b>R02</b> — ขณะนี้มีเลือดออกมาก ร่วมกับหน้ามืด เป็นลม ใจสั่น หายใจเหนื่อย หรืออ่อนเพลียมาก<small>Heavy bleeding + hemodynamic symptoms</small></span></label>
+        <label class="chip"><input type="checkbox" value="R03" id="R03"><span><b>R03</b> — คลำพบก้อนที่เต้านม มีแผลที่เต้านม หรือมีเลือดออกจากหัวนม<small>Breast lump / nipple discharge</small></span></label>
+        <label class="chip"><input type="checkbox" value="R04" id="R04"><span><b>R04</b> — ท้องอืด/ท้องโตต่อเนื่อง อิ่มเร็ว น้ำหนักลดโดยไม่ตั้งใจ หรือปวดท้องน้อยต่อเนื่อง<small>Persistent abdominal / pelvic symptoms</small></span></label>
+        <label class="chip"><input type="checkbox" value="R05" id="R05"><span><b>R05</b> — ขณะนี้มีเจ็บหน้าอก หายใจลำบาก หมดสติ แขนขาอ่อนแรงข้างหนึ่ง หรือพูดไม่ชัด<small>⛔ Emergency — โทร 1669 หรือไปห้องฉุกเฉิน</small></span></label>
+        <label class="chip"><input type="checkbox" value="R06" id="R06"><span><b>R06</b> — ในช่วง 2 สัปดาห์ที่ผ่านมา มีความคิดว่าตนเองไม่ควรมีชีวิตอยู่ หรือคิดทำร้ายตนเอง<small>⛔ Suicide safety — 1323 กรมสุขภาพจิต</small></span></label>
+        <label class="chip"><input type="checkbox" value="R07" id="R07"><span><b>R07</b> — กระดูกหักจากการหกล้ม/กระแทกเพียงเล็กน้อย หรือปวดหลังรุนแรงเฉียบพลันหลังออกแรงเล็กน้อย<small>Fragility fracture — evaluate osteoporosis</small></span></label>
+      </div>
+
+      <div class="alert-acute" id="redAlert" style="display:none;margin-top:14px">
+        <b>⛔ พบสัญญาณอันตราย</b> — อาการนี้ไม่ได้หมายความว่าคุณเป็นโรคร้ายแรง แต่ไม่ควรรอคะแนนจากแบบประเมิน
+        โปรดกดปุ่ม "ประเมิน" ด้านล่างเพื่อดูเส้นทางบริการที่เหมาะสม
+      </div>
+    </div>
+
+    <!-- Section 3: Symptom burden (last 4 weeks, 0-4 scale each) -->
+    <div class="card">
+      <div class="sec-head"><div class="sec-num">3</div><h2>อาการใน 4 สัปดาห์ที่ผ่านมา</h2></div>
+      <p class="sec-desc">ให้คะแนนแต่ละอาการ · 0 = ไม่มี · 4 = รุนแรงมาก · คะแนนนี้ใช้จัดลำดับความเร่งด่วน ไม่ใช่การวินิจฉัย</p>
+
+      <div id="symptoms">
+        <!-- populated via JS from SYMPTOMS array -->
+      </div>
+    </div>
+
+    <!-- Section 4: Life impact -->
+    <div class="card">
+      <div class="sec-head"><div class="sec-num">4</div><h2>ผลกระทบต่อชีวิต</h2></div>
+      <p class="sec-desc">อาการเหล่านี้กระทบชีวิตประจำวันมากน้อยเพียงใด</p>
+
+      <label class="fld"><span>อาการทั้งหมดกระทบการนอน งาน/การเรียน กิจวัตร ความสัมพันธ์ หรือคุณภาพชีวิตโดยรวมเพียงใด (0 = ไม่กระทบ, 4 = กระทบมาก)</span>
+        <div class="seg seg-4" id="impactSeg">
+          <input type="radio" name="impact" id="imp0" value="0"><label for="imp0">0 · ไม่กระทบ</label>
+          <input type="radio" name="impact" id="imp1" value="1"><label for="imp1">1 · เล็กน้อย</label>
+          <input type="radio" name="impact" id="imp2" value="2"><label for="imp2">2 · ปานกลาง</label>
+          <input type="radio" name="impact" id="imp3" value="3"><label for="imp3">3 · มาก</label>
+          <input type="radio" name="impact" id="imp4" value="4"><label for="imp4">4 · มากที่สุด</label>
+        </div>
+      </label>
+
+      <label class="fld" style="margin-bottom:0"><span>คุณต้องการให้แพทย์ช่วยเรื่องใดมากที่สุด (เลือกได้หลายข้อ)</span>
+        <div class="chips" id="goals" style="margin-top:4px">
+          <label class="chip"><input type="checkbox" value="vasomotor"><span>ลดร้อนวูบวาบ / เหงื่อกลางคืน<small>Vasomotor symptoms</small></span></label>
+          <label class="chip"><input type="checkbox" value="sleep_mood"><span>ช่วยเรื่องการนอนและอารมณ์<small>Sleep / mood</small></span></label>
+          <label class="chip"><input type="checkbox" value="gsm"><span>ช่องคลอด / ระบบปัสสาวะ / เพศสัมพันธ์<small>GSM</small></span></label>
+          <label class="chip"><input type="checkbox" value="cardio"><span>น้ำหนัก เบาหวาน ไขมัน สุขภาพหัวใจ<small>Cardiometabolic</small></span></label>
+          <label class="chip"><input type="checkbox" value="bone"><span>กระดูกและการป้องกันหกล้ม<small>Bone health</small></span></label>
+          <label class="chip"><input type="checkbox" value="hrt_consult"><span>ปรึกษาฮอร์โมนและทางเลือกไม่ใช้ฮอร์โมน<small>HRT / non-hormonal options</small></span></label>
+          <label class="chip"><input type="checkbox" value="screening"><span>ตรวจสุขภาพและคัดกรองมะเร็ง<small>Cancer screening</small></span></label>
+        </div>
+      </label>
+    </div>
+
+    <!-- Section 5: Risk modules -->
+    <div class="card">
+      <div class="sec-head"><div class="sec-num">5</div><h2>ปัจจัยเสี่ยงระยะยาว<span class="optional-tag">ติ๊กเท่าที่มี</span></h2></div>
+      <p class="sec-desc">ใช้ปรับความเร่งด่วนและเลือก service module ที่เหมาะ (กระดูก / หัวใจ / มะเร็ง / HRT safety)</p>
+
+      <h4 style="font-family:'Anuphan';color:var(--navy);font-size:14px;margin:8px 0 6px">🦴 ปัจจัยเสี่ยงกระดูกหักและกระดูกพรุน</h4>
+      <div class="chips" id="bone">
+        <label class="chip"><input type="checkbox" value="prior_fracture"><span>เคยกระดูกหักหลังอายุ 40 (ไม่นับอุบัติเหตุรุนแรง)<small>Fragility fracture</small></span></label>
+        <label class="chip"><input type="checkbox" value="parent_hip"><span>บิดา/มารดา เคยกระดูกสะโพกหัก<small>Parental hip fracture</small></span></label>
+        <label class="chip"><input type="checkbox" value="low_bmi"><span>น้ำหนักตัวน้อย / BMI ต่ำ<small>Low BMI</small></span></label>
+        <label class="chip"><input type="checkbox" value="steroid"><span>ใช้ยา steroid ต่อเนื่อง ≥3 เดือน<small>Chronic steroid use</small></span></label>
+      </div>
+
+      <h4 style="font-family:'Anuphan';color:var(--navy);font-size:14px;margin:14px 0 6px">❤️ ปัจจัยเสี่ยงหัวใจและเมตาบอลิก</h4>
+      <div class="chips" id="cardio">
+        <label class="chip"><input type="checkbox" value="htn"><span>ความดันโลหิตสูง<small>Hypertension</small></span></label>
+        <label class="chip"><input type="checkbox" value="dm"><span>เบาหวาน<small>Diabetes</small></span></label>
+        <label class="chip"><input type="checkbox" value="dyslipid"><span>ไขมันในเลือดสูง<small>Dyslipidemia</small></span></label>
+        <label class="chip"><input type="checkbox" value="smoke"><span>สูบบุหรี่<small>Current smoker</small></span></label>
+        <label class="chip"><input type="checkbox" value="obesity"><span>อ้วนลงพุง<small>Central obesity</small></span></label>
+        <label class="chip"><input type="checkbox" value="cvd"><span>โรคหัวใจ/หลอดเลือด<small>Established CV disease</small></span></label>
+      </div>
+
+      <h4 style="font-family:'Anuphan';color:var(--navy);font-size:14px;margin:14px 0 6px">💊 ปัจจัยที่มีผลต่อการใช้ฮอร์โมน (HRT safety)</h4>
+      <p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">
+        <b>หมายเหตุ:</b> การมีข้อใดข้อหนึ่งไม่ได้แปลว่า "ห้ามใช้ฮอร์โมน" — เป็นเพียงข้อมูลให้แพทย์พิจารณาร่วมกับคุณ (shared decision-making) แบบประเมินนี้ไม่สรุปให้
+      </p>
+      <div class="chips" id="hrtsafety">
+        <label class="chip"><input type="checkbox" value="hormone_cancer"><span>มะเร็งที่ไวต่อฮอร์โมน (เต้านม/เยื่อบุมดลูก)<small>Hormone-sensitive cancer</small></span></label>
+        <label class="chip"><input type="checkbox" value="vte"><span>เคยมีลิ่มเลือดอุดตัน (DVT/PE)<small>Prior VTE</small></span></label>
+        <label class="chip"><input type="checkbox" value="stroke_hx"><span>เคยเป็น stroke / TIA<small>Prior stroke</small></span></label>
+        <label class="chip"><input type="checkbox" value="cad"><span>โรคหัวใจขาดเลือด<small>CAD</small></span></label>
+        <label class="chip"><input type="checkbox" value="liver"><span>โรคตับที่ยังไม่คงที่<small>Active liver disease</small></span></label>
+        <label class="chip"><input type="checkbox" value="migraine_aura"><span>ไมเกรนแบบมีออร่า<small>Migraine with aura</small></span></label>
+      </div>
+
+      <h4 style="font-family:'Anuphan';color:var(--navy);font-size:14px;margin:14px 0 6px">🎗️ การตรวจคัดกรองที่ควรทำ</h4>
+      <div class="chips" id="screening">
+        <label class="chip"><input type="checkbox" value="breast_overdue"><span>มะเร็งเต้านม (mammogram) เกินกำหนดหรือไม่เคยตรวจ<small>Age ≥ 40</small></span></label>
+        <label class="chip"><input type="checkbox" value="cervical_overdue"><span>มะเร็งปากมดลูก (Pap/HPV) เกินกำหนด<small>Every 3-5 yrs</small></span></label>
+        <label class="chip"><input type="checkbox" value="colon_overdue"><span>มะเร็งลำไส้ใหญ่ เกินกำหนดหรือไม่เคยตรวจ<small>Age ≥ 45-50</small></span></label>
+        <label class="chip"><input type="checkbox" value="dxa_never"><span>ไม่เคยตรวจความหนาแน่นกระดูก (DXA) และอายุ ≥ 65<small>Osteoporosis screening</small></span></label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn-primary" onclick="assess()">ประเมินความจำเป็น →</button>
+      <button type="button" class="btn-ghost" onclick="resetForm()">เริ่มใหม่</button>
+    </div>
+  </form>
+
+  <!-- ==================== RESULT ==================== -->
+  <div id="result"></div>
+
+  <div class="footer-note no-print" style="font-size:12px;color:var(--muted);text-align:center;margin-top:24px;line-height:1.6">
+    อ้างอิงตาม NICE NG23 + ACOG 2026 + NAMS 2022-2023 + USPSTF 2025 · เกณฑ์คะแนนที่ใช้เป็น operational hypothesis สำหรับ pilot ยังไม่ผ่าน external validation<br>
+    ผลการประเมินเป็น "แผนที่ความเร่งด่วน" ไม่ใช่การวินิจฉัยและไม่สรุปการใช้ฮอร์โมน โปรดปรึกษาแพทย์เพื่อยืนยันและวางแผนการดูแล
+  </div>
+</div>
+
+<script>
+  // BSR logo — replace with base64 data URI of BSR_logo.jpg (use scripts/embed-logo.py)
+  const BSR_LOGO_URI = 'data:image/jpeg;base64,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';
+
+  // ============================================================
+  // CONFIG — hospital contact + backend
+  // ============================================================
+  const CONFIG = {
+    GAS_URL: '{{GAS_URL}}',                                  // paste from Apps Script deploy
+    HOSPITAL_NAME: 'โรงพยาบาลกรุงเทพ สุราษฎร์',
+    PHONE: '077-956-789',
+    PHONE_TEL: '077956789',
+    LINE_URL: 'https://line.me/R/ti/p/@bangkoksurat',
+  };
+
+  // ============================================================
+  // THRESHOLDS — pilot operational hypothesis
+  // NOTE: The 10/20 cut-offs are NOT validated externally.
+  // Per BSR Menopause Check design doc: adjust after pilot with
+  // clinician comparison, prioritizing sensitivity (avoid false-neg).
+  // ============================================================
+  const THRESHOLDS = {
+    AGE_EARLY_MENOPAUSE: 45,        // NICE NG23 — assess as early menopause
+    AGE_POI: 40,                    // NICE NG23 — Premature Ovarian Insufficiency
+    AGE_BONE_SCREENING: 65,         // USPSTF 2025
+    SCORE_ORANGE: 20,               // pilot hypothesis (7-14 day pathway)
+    SCORE_YELLOW: 10,               // pilot hypothesis (2-4 week pathway)
+    SEVERE_SYMPTOM: 4,              // any single symptom scored 4 → orange
+    HIGH_IMPACT: 3,                 // life impact ≥3 → orange
+    MOD_IMPACT: 2,                  // life impact = 2 → yellow
+  };
+
+  // ============================================================
+  // SYMPTOMS — 10 items scored 0-4 (per BSR design doc §4)
+  // ============================================================
+  const SYMPTOMS = [
+    {id:'S01', label:'ร้อนวูบวาบ / เหงื่อออกกลางคืน',                     tag:'vasomotor'},
+    {id:'S02', label:'หลับยาก ตื่นบ่อย หรือตื่นแล้วไม่สดชื่น',              tag:'sleep'},
+    {id:'S03', label:'ใจสั่น หรือรู้สึกหัวใจเต้นผิดปกติ',                    tag:'cardiac'},
+    {id:'S04', label:'อารมณ์เศร้า เบื่อหน่าย หรือไม่สนใจสิ่งที่เคยชอบ',     tag:'mood'},
+    {id:'S05', label:'วิตกกังวล ตึงเครียด หรือหงุดหงิดง่าย',                tag:'mood'},
+    {id:'S06', label:'เหนื่อยง่าย สมาธิลดลง หรือหลงลืมจนรบกวนชีวิต',       tag:'cognitive'},
+    {id:'S07', label:'ปวดข้อ ปวดกล้ามเนื้อ หรือร่างกายไม่คล่องตัว',         tag:'musculoskeletal'},
+    {id:'S08', label:'ช่องคลอดแห้ง แสบ คัน หรือระคายเคือง',                tag:'gsm'},
+    {id:'S09', label:'เจ็บขณะมีเพศสัมพันธ์ หรือปัญหาทางเพศที่รบกวนใจ',      tag:'gsm'},
+    {id:'S10', label:'ปัสสาวะแสบขัด ปัสสาวะบ่อย กลั้นไม่อยู่ หรือติดเชื้อซ้ำ', tag:'urinary'},
+  ];
+
+  const RED_FLAGS = {
+    R01: 'มีเลือดออกหลังหมดประจำเดือน (postmenopausal bleeding)',
+    R02: 'เลือดออกมาก + อาการทางระบบไหลเวียนโลหิต',
+    R03: 'ก้อน/แผล/เลือดออกจากเต้านม',
+    R04: 'ท้องอืด/อิ่มเร็ว/น้ำหนักลด/ปวดท้องน้อยต่อเนื่อง',
+    R05: 'อาการหัวใจ/หลอดเลือดสมองเฉียบพลัน',
+    R06: 'ความคิดทำร้ายตนเอง',
+    R07: 'กระดูกหักจากแรงกระแทกเล็กน้อย / ปวดหลังเฉียบพลัน',
+  };
+
+  // Pathway routing per red flag (from BSR design doc §3)
+  const RED_FLAG_PATHWAYS = {
+    R01: 'Gynecology urgent — ประเมินภายใน 1-2 สัปดาห์ (ACOG 2026)',
+    R02: 'ER / urgent medical assessment',
+    R03: 'Breast Clinic — นัดตรวจโดยเร็ว',
+    R04: 'Gynecology / Internal Medicine',
+    R05: '⛔ Emergency — โทร 1669 หรือไปห้องฉุกเฉินทันที',
+    R06: '⛔ Immediate suicide safety — โทร 1323 กรมสุขภาพจิต หรือไป ER',
+    R07: 'Fracture / Spine assessment + DXA',
+  };
+
+  // ============================================================
+  // LABELS — for humanizing form values in the summary card
+  // ============================================================
+  const LABELS = {
+    lmp: {current:'ยังมาอยู่', '1-3m':'1-3 เดือน', '4-11m':'4-11 เดือน', '12m+':'≥12 เดือน (หมดประจำเดือน)', unknown:'ไม่ทราบ'},
+    cycle: {no_change:'ไม่เปลี่ยน', irregular:'ไม่สม่ำเสมอ', heavy_long:'มามาก/นานขึ้น', stopped:'ไม่มีประจำเดือน', na:'ไม่มีอยู่แล้ว'},
+    surgery: {none:'ไม่เคยผ่าตัด', hyster:'ตัดมดลูก', oopho_1:'ตัดรังไข่ข้างเดียว', oopho_both:'ตัดรังไข่สองข้าง', hyster_oopho_both:'ตัดมดลูก+รังไข่สองข้าง', unknown:'ไม่แน่ใจ'},
+    hist: {chemo_rad:'เคมี/รังสี', hormone_meds:'ฮอร์โมน/ยาคุม', preg_concern:'ปรึกษาคุมกำเนิด'},
+    bone: {prior_fracture:'เคยกระดูกหัก', parent_hip:'พ่อ/แม่ กระดูกสะโพกหัก', low_bmi:'BMI ต่ำ', steroid:'ใช้ steroid'},
+    cardio: {htn:'ความดันสูง', dm:'เบาหวาน', dyslipid:'ไขมันสูง', smoke:'สูบบุหรี่', obesity:'อ้วนลงพุง', cvd:'โรคหัวใจ/หลอดเลือด'},
+    hrtsafety: {hormone_cancer:'มะเร็งไวต่อฮอร์โมน', vte:'ลิ่มเลือดอุดตัน', stroke_hx:'เคย stroke/TIA', cad:'CAD', liver:'โรคตับ', migraine_aura:'ไมเกรนมีออร่า'},
+    screening: {breast_overdue:'Mammogram เกินกำหนด', cervical_overdue:'Pap/HPV เกินกำหนด', colon_overdue:'ลำไส้เกินกำหนด', dxa_never:'ไม่เคย DXA (อายุ ≥65)'},
+    goals: {vasomotor:'ร้อนวูบวาบ', sleep_mood:'นอน/อารมณ์', gsm:'GSM/เพศ', cardio:'หัวใจ/เมตาบอลิก', bone:'กระดูก', hrt_consult:'ปรึกษา HRT', screening:'คัดกรองมะเร็ง'},
+  };
+  const GUIDELINE_VERSION = 'NICE NG23 + ACOG 2026 + NAMS 2022-2023 + USPSTF 2025 · BSR Menopause Check v1.0';
+  const LAST_REVIEW_DATE = '2026-08-06';
+  function labelize(arr, map){ return (arr||[]).map(v=>map[v]||v); }
+  function fmtDateTH(d){
+    const months=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()+543} · ${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')} น.`;
+  }
+
+  // ============================================================
+  // AGGREGATE-ONLY analytics — no PII ever leaves the browser
+  // ============================================================
+  function ageBinOf(age){
+    if (age < 30) return '<30';
+    if (age < 40) return '30-39';
+    if (age < 50) return '40-49';
+    if (age < 60) return '50-59';
+    if (age < 70) return '60-69';
+    if (age < 80) return '70-79';
+    return '≥80';
+  }
+  function postAggregateStats(payload){
+    if (!CONFIG.GAS_URL || CONFIG.GAS_URL.indexOf('{{') === 0) return;
+    fetch(CONFIG.GAS_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload)
+    }).catch(e => console.error('Aggregate send failed:', e));
+  }
+
+  // iframe auto-resize (for WordPress /surat embed)
+  (function(){
+    function postHeight(){
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      try { parent.postMessage({ type:'bsr-menopause-height', height:h }, '*'); } catch(e){}
+    }
+    window.addEventListener('load', postHeight);
+    window.addEventListener('resize', postHeight);
+    if (window.ResizeObserver) { new ResizeObserver(postHeight).observe(document.body); }
+    else { setInterval(postHeight, 600); }
+  })();
+
+  // ============================================================
+  // Helpers
+  // ============================================================
+  const $ = id => document.getElementById(id);
+  const num = id => { const v = parseFloat($(id).value); return isNaN(v) ? null : v; };
+  const checked = sel => Array.from(document.querySelectorAll(sel+' input:checked')).map(c=>c.value);
+
+  function resetForm(){
+    $('form').reset();
+    $('result').style.display='none';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function toggleLab(){
+    var el = $('labSection'); var checked = $('hasLab').checked;
+    if (el) el.style.display = checked ? 'block' : 'none';
+    var r = $('result'); if (r) r.style.display = 'none';
+  }
+
+  // ============================================================
+  // Print / Share PDF — works on iOS Safari + Android + desktop
+  // ============================================================
+  function printReport(){
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|Mobile|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) { try { window.print(); } catch(e) { alert('ไม่สามารถเปิดหน้าต่างพิมพ์ได้'); } return; }
+
+    var inIframe = false;
+    try { inIframe = window.self !== window.top; } catch(e) { inIframe = true; }
+    if (!inIframe) { window.print(); return; }
+
+    // Desktop-in-iframe: open clean report in new tab
+    var resultEl = $('result');
+    if (!resultEl) { window.print(); return; }
+    var styles = '';
+    document.querySelectorAll('style').forEach(function(el){ styles += el.outerHTML; });
+    var html = '<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>Report</title>' + styles +
+      '<style>body{margin:18px}#result{display:block!important}.no-print{display:none!important}' +
+      '.print-header,.print-contact,.print-footer{display:block!important}</style></head><body>' +
+      resultEl.outerHTML + '<scr'+'ipt>setTimeout(function(){window.print();},500);</scr'+'ipt></body></html>';
+    var w = window.open('', '_blank');
+    if (!w) { window.print(); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+  }
+
+  var _html2pdfPromise = null;
+  function loadHtml2Pdf(){
+    if (_html2pdfPromise) return _html2pdfPromise;
+    _html2pdfPromise = new Promise(function(resolve, reject){
+      if (typeof html2pdf !== 'undefined') return resolve();
+      var sc = document.createElement('script');
+      sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+      sc.onload = resolve;
+      sc.onerror = function(){ reject(new Error('โหลด library ไม่สำเร็จ')); };
+      document.head.appendChild(sc);
+    });
+    return _html2pdfPromise;
+  }
+  async function sharePDF(){
+    var btn = $('sharePdfBtn');
+    var original = btn ? btn.innerHTML : '';
+    if (btn){ btn.disabled = true; btn.innerHTML = '⏳ กำลังสร้าง PDF...'; }
+    try {
+      await loadHtml2Pdf();
+      var savedY = window.scrollY; window.scrollTo(0,0);
+      document.body.classList.add('pdf-rendering');
+      if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch(_){} }
+      await new Promise(function(r){ setTimeout(r, 250); });
+      var el = $('result');
+      if (!el) throw new Error('ยังไม่มีผลประเมิน');
+      var opt = {
+        margin:[8,8,8,8],
+        filename: 'BSR-Menopause-Report-'+(window.lastAssessment&&window.lastAssessment.assessmentId||Date.now())+'.pdf',
+        image:{type:'jpeg',quality:.95},
+        html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff',scrollY:0,scrollX:0,windowWidth:780,width:780},
+        jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},
+        pagebreak:{mode:['css','legacy']}
+      };
+      var blob = await html2pdf().set(opt).from(el).outputPdf('blob');
+      document.body.classList.remove('pdf-rendering'); window.scrollTo(0,savedY);
+      var file = new File([blob], opt.filename, {type:'application/pdf'});
+      if (navigator.canShare && navigator.canShare({files:[file]})) {
+        try { await navigator.share({files:[file], title:'ผลประเมิน'}); }
+        catch(err) { if (err.name!=='AbortError') throw err; }
+      } else {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a'); a.href=url; a.download=opt.filename;
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);
+        alert('ดาวน์โหลด PDF เรียบร้อย — เปิด LINE แล้วแนบไฟล์ได้เลย');
+      }
+    } catch(e) {
+      document.body.classList.remove('pdf-rendering');
+      alert('ไม่สามารถสร้าง PDF ได้: '+(e.message||'unknown'));
+    } finally {
+      if (btn){ btn.disabled=false; btn.innerHTML=original; }
+    }
+  }
+
+  // ============================================================
+  // SYMPTOM UI — build segmented rows from SYMPTOMS array
+  // ============================================================
+  function buildSymptomInputs(){
+    const host = $('symptoms');
+    if (!host) return;
+    host.innerHTML = SYMPTOMS.map(s => `
+      <label class="fld" style="margin-bottom:14px">
+        <span><b>${s.id}</b> — ${s.label}</span>
+        <div class="seg seg-4">
+          ${[0,1,2,3,4].map(v => `
+            <input type="radio" name="${s.id}" id="${s.id}_${v}" value="${v}" ${v===0?'checked':''}>
+            <label for="${s.id}_${v}">${v}</label>
+          `).join('')}
+        </div>
+      </label>`).join('');
+  }
+
+  // ============================================================
+  // Live red-flag alert (shown when any R0X checkbox is ticked)
+  // ============================================================
+  function attachRedFlagWatcher(){
+    const box = $('redAlert');
+    const inputs = document.querySelectorAll('#redflags input');
+    function refresh(){
+      const any = Array.from(inputs).some(i => i.checked);
+      if (box) box.style.display = any ? 'block' : 'none';
+    }
+    inputs.forEach(i => i.addEventListener('change', refresh));
+  }
+
+  // ============================================================
+  // ASSESS — triage per BSR design doc §6
+  // Order: red_flag → early/induced → severity/impact → risk → preference
+  // ============================================================
+  window.lastAssessment = {};
+  function assess(){
+    const age = num('age');
+    if (age === null){ alert('กรุณากรอกอายุก่อนครับ'); $('age').focus(); return; }
+
+    // Collect inputs
+    const lmp = $('lmp').value;
+    const cycle = $('cycle').value;
+    const surgery = $('surgery').value;
+    const hist = checked('#hist');
+    const rf = checked('#redflags');
+    const goals = checked('#goals');
+    const bone = checked('#bone');
+    const cardio = checked('#cardio');
+    const hrtsafety = checked('#hrtsafety');
+    const screening = checked('#screening');
+    const impact = parseInt((document.querySelector('input[name=impact]:checked')||{}).value || '0', 10);
+
+    // Symptom scores (each 0-4, total 0-40)
+    const symScores = {};
+    let symTotal = 0, maxSym = 0;
+    SYMPTOMS.forEach(s => {
+      const v = parseInt((document.querySelector(`input[name=${s.id}]:checked`)||{}).value || '0', 10);
+      symScores[s.id] = v;
+      symTotal += v;
+      if (v > maxSym) maxSym = v;
+    });
+
+    // Derived flags — with source annotations
+    const isEarlyMenopause = age < THRESHOLDS.AGE_EARLY_MENOPAUSE && (lmp === '4-11m' || lmp === '12m+' || cycle === 'stopped' || surgery === 'oopho_both' || surgery === 'hyster_oopho_both');
+    const isPOI = age < THRESHOLDS.AGE_POI && (lmp === '4-11m' || lmp === '12m+' || cycle === 'stopped');
+    const isInduced = hist.includes('chemo_rad') || surgery === 'oopho_both' || surgery === 'hyster_oopho_both';
+    const isPostmenopausal = lmp === '12m+';
+
+    // High bone risk (composite — used for orange trigger)
+    const highBoneRisk = age >= THRESHOLDS.AGE_BONE_SCREENING
+      || bone.includes('prior_fracture')
+      || bone.includes('parent_hip')
+      || (bone.length >= 2)
+      || rf.includes('R07');
+
+    // Cardiometabolic burden — count factors
+    const cardioCount = cardio.length;
+    const highCardioRisk = cardioCount >= 3 || cardio.includes('cvd');
+
+    // Recurrent GSM — flagged when S08/S09/S10 combined ≥ 4
+    const gsmScore = (symScores.S08||0) + (symScores.S09||0) + (symScores.S10||0);
+    const recurrentGSM = gsmScore >= 4;
+
+    // Cancer screening overdue count
+    const screeningOverdue = screening.length;
+
+    // ============================================================
+    // TRIAGE LOGIC (per §6 pseudo-logic)
+    // ============================================================
+    let level = 'green';
+    const reasons = [];
+    const pathways = [];        // service pathways triggered
+
+    // 1. RED — any red flag → immediate red + stop routine scoring
+    if (rf.length > 0){
+      level = 'red';
+      rf.forEach(code => {
+        reasons.push(`${code} — ${RED_FLAGS[code] || code}`);
+        pathways.push(RED_FLAG_PATHWAYS[code]);
+      });
+    }
+    // 2. ORANGE (7-14 days)
+    else {
+      const orangeTriggers = [];
+      if (isPOI)                       orangeTriggers.push('อายุ <40 พร้อมประจำเดือนหยุด/ผิดปกติ — ประเมิน POI เฉพาะทาง (NICE NG23)');
+      else if (isEarlyMenopause)       orangeTriggers.push('อายุ <45 พร้อมอาการ/ประจำเดือนผิดปกติ — early menopause pathway (NICE NG23)');
+      if (isInduced)                   orangeTriggers.push('Induced menopause (ผ่าตัดรังไข่ 2 ข้าง หรือเคมี/รังสี) — Gynecology + bone/cardiometabolic review');
+      if (maxSym >= THRESHOLDS.SEVERE_SYMPTOM)  orangeTriggers.push(`มีอาการที่รุนแรงที่สุดระดับ ${maxSym}/4`);
+      if (impact >= THRESHOLDS.HIGH_IMPACT)     orangeTriggers.push(`อาการกระทบชีวิตประจำวันในระดับ ${impact}/4`);
+      if (symTotal >= THRESHOLDS.SCORE_ORANGE)  orangeTriggers.push(`คะแนนอาการรวม ${symTotal}/40 (≥${THRESHOLDS.SCORE_ORANGE})`);
+      if (recurrentGSM)                orangeTriggers.push(`อาการช่องคลอด/ระบบปัสสาวะ/เพศสัมพันธ์ต่อเนื่อง (GSM score ${gsmScore})`);
+      if (highBoneRisk)                orangeTriggers.push('มีปัจจัยเสี่ยงกระดูกหักและกระดูกพรุนสูง');
+      if (highCardioRisk)              orangeTriggers.push('มีปัจจัยเสี่ยงหัวใจ/เมตาบอลิก ≥3 ข้อ หรือมีโรคหัวใจ');
+      if (goals.includes('hrt_consult') && hrtsafety.length > 0)
+        orangeTriggers.push('ต้องการปรึกษา HRT พร้อมมีปัจจัยที่ต้องพิจารณาความปลอดภัย — ควรพบแพทย์เพื่อ shared decision-making');
+
+      if (orangeTriggers.length){
+        level = 'orange';
+        reasons.push(...orangeTriggers);
+      }
+      // 3. YELLOW (2-4 weeks)
+      else {
+        const yellowTriggers = [];
+        if (symTotal >= THRESHOLDS.SCORE_YELLOW) yellowTriggers.push(`คะแนนอาการรวม ${symTotal}/40 (${THRESHOLDS.SCORE_YELLOW}-${THRESHOLDS.SCORE_ORANGE-1})`);
+        if (impact === THRESHOLDS.MOD_IMPACT)    yellowTriggers.push(`อาการกระทบชีวิตปานกลาง (${impact}/4)`);
+        if (goals.length >= 2)                   yellowTriggers.push('มีเป้าหมายที่ต้องการปรึกษาแพทย์หลายด้าน');
+        if (screeningOverdue >= 2)               yellowTriggers.push(`การตรวจคัดกรอง ${screeningOverdue} รายการเกินกำหนด — ควรวางแผน`);
+
+        if (yellowTriggers.length){
+          level = 'yellow';
+          reasons.push(...yellowTriggers);
+        } else {
+          reasons.push('ไม่พบสัญญาณอันตรายและอาการอยู่ในระดับที่ดูแลตนเองได้ — คงการดูแลสุขภาพและประเมินซ้ำ 6-8 สัปดาห์');
+        }
+      }
+    }
+
+    // ============================================================
+    // Assemble service module list (informational)
+    // ============================================================
+    const modules = [];
+    if (isEarlyMenopause || isPOI || isInduced) modules.push('Gynecology + Bone/Cardiometabolic review (Early/Induced Menopause)');
+    if (highBoneRisk) modules.push('Bone Health / Fracture Risk / DXA (USPSTF 2025)');
+    if (highCardioRisk || cardio.length > 0) modules.push('Cardiometabolic Assessment / Lifestyle Clinic');
+    if (hrtsafety.length > 0 || goals.includes('hrt_consult')) modules.push('Physician-led HRT Benefit-Risk Discussion (NAMS 2022) — ไม่สรุปห้ามใช้จากแบบประเมิน');
+    if (recurrentGSM || goals.includes('gsm')) modules.push('Gynecology / Urogynecology / Sexual Health (GSM)');
+    if (screeningOverdue > 0 || goals.includes('screening')) modules.push('Preventive Screening Pathway (Breast / Cervical / Colon / DXA)');
+    if ((symScores.S04||0) >= 3 || (symScores.S05||0) >= 3 || rf.includes('R06')) modules.push('Psychological Support / Psychiatry');
+
+    // Timeframe
+    const timeframe = {
+      red:    'ทันที ถึง ภายใน 24 ชั่วโมง (ขึ้นกับชนิดของสัญญาณอันตราย)',
+      orange: 'ภายใน 7-14 วัน (Women\'s Health / specialty pathway)',
+      yellow: 'ภายใน 2-4 สัปดาห์ (นัดคลินิก / tele-triage)',
+      green:  'ดูแลตนเอง + ประเมินซ้ำใน 6-8 สัปดาห์ (นัดได้เสมอถ้ากังวล)',
+    }[level];
+
+    // Self-care advice (green)
+    const selfCare = level === 'green' ? [
+      'นอนให้เป็นเวลา 7-8 ชั่วโมง/คืน',
+      'ออกกำลังกายแบบแอโรบิก + แรงต้าน สม่ำเสมอ 150 นาที/สัปดาห์',
+      'หลีกเลี่ยงสิ่งกระตุ้นร้อนวูบวาบ (กาแฟจัด แอลกอฮอล์ อาหารเผ็ดจัด อุณหภูมิร้อน)',
+      'ประเมินซ้ำใน 6-8 สัปดาห์ หรือมาก่อนถ้าอาการมากขึ้น',
+    ] : [];
+
+    // Aggregate stats (no PII)
+    const assessmentId = 'M' + Date.now();
+    window.lastAssessment = { assessmentId };
+    postAggregateStats({
+      type: 'menopause_check',
+      date: new Date().toISOString().slice(0,10),
+      ageBin: ageBinOf(age),
+      level,
+      redFlagCount: rf.length,
+      symTotal,
+      impact,
+      isEarly: isEarlyMenopause,
+      isPOI,
+      isInduced,
+    });
+
+    render({
+      level, reasons, pathways, modules, timeframe, selfCare,
+      symTotal, maxSym, impact, symScores,
+      isEarlyMenopause, isPOI, isInduced, isPostmenopausal,
+      assessmentId, assessedAt: new Date(),
+      patient: { age, lmp, cycle, surgery, hist, goals, bone, cardio, hrtsafety, screening, rf }
+    });
+  }
+
+  // ============================================================
+  // RENDER — result page with print-only header/contact/footer
+  // ============================================================
+  function render(d){
+    const map = {
+      red:    {c:'red',    t:'ควรได้รับการประเมินเร่งด่วน',      e:'ระดับความเร่งด่วน', ico:'⛔'},
+      orange: {c:'orange', t:'ควรพบแพทย์ภายใน 7-14 วัน',        e:'ระดับความเร่งด่วน', ico:'⚠️'},
+      yellow: {c:'yellow', t:'แนะนำนัดประเมินภายใน 2-4 สัปดาห์', e:'ระดับความเร่งด่วน', ico:'📋'},
+      green:  {c:'green',  t:'ดูแลตนเอง + ประเมินซ้ำใน 6-8 สัปดาห์', e:'ระดับความเร่งด่วน', ico:'🌿'},
+    };
+    const m = map[d.level];
+
+    // ---- Patient summary card ----
+    const p = d.patient || {};
+    const psRow = (k,v) => `<div><span class="k">${k}</span><span class="v">${v}</span></div>`;
+    const psItems = [];
+    psItems.push(psRow('อายุ', `${p.age} ปี`));
+    if (p.lmp)     psItems.push(psRow('ประจำเดือนล่าสุด', LABELS.lmp[p.lmp] || '—'));
+    if (p.cycle)   psItems.push(psRow('รอบเดือน 12 เดือน', LABELS.cycle[p.cycle] || '—'));
+    if (p.surgery) psItems.push(psRow('ประวัติผ่าตัด', LABELS.surgery[p.surgery] || '—'));
+    psItems.push(psRow('คะแนนอาการรวม', `${d.symTotal}/40 · สูงสุด ${d.maxSym}/4`));
+    psItems.push(psRow('ผลกระทบต่อชีวิต', `${d.impact}/4`));
+
+    const tagBlock = (title, arr) => `
+      <div class="ps-sub"><h4>${title}</h4>
+        ${arr.length
+          ? `<div class="ps-tags">${arr.map(x=>`<span class="ps-tag">${x}</span>`).join('')}</div>`
+          : `<div class="ps-empty">— ไม่ได้ระบุ —</div>`}
+      </div>`;
+
+    // Symptom detail (only show non-zero)
+    const symDetail = SYMPTOMS
+      .filter(s => (d.symScores[s.id]||0) > 0)
+      .map(s => `<span class="ps-tag">${s.id}: ${d.symScores[s.id]}/4</span>`);
+
+    const patientSummaryHTML = `
+      <div class="card patient-summary">
+        <h3>ข้อมูลที่กรอก</h3>
+        <div class="ps-grid">${psItems.join('')}</div>
+        ${symDetail.length ? `<div class="ps-sub"><h4>อาการรายข้อ (แสดงเฉพาะที่มีคะแนน)</h4><div class="ps-tags">${symDetail.join('')}</div></div>` : ''}
+        ${tagBlock('เป้าหมายที่ต้องการปรึกษา', labelize(p.goals, LABELS.goals))}
+        ${tagBlock('ปัจจัยเสี่ยงกระดูก', labelize(p.bone, LABELS.bone))}
+        ${tagBlock('ปัจจัยเสี่ยงหัวใจ/เมตาบอลิก', labelize(p.cardio, LABELS.cardio))}
+        ${tagBlock('ปัจจัย HRT safety', labelize(p.hrtsafety, LABELS.hrtsafety))}
+        ${tagBlock('การคัดกรองเกินกำหนด', labelize(p.screening, LABELS.screening))}
+      </div>`;
+
+    // ---- Print header / contact / footer (same pattern) ----
+    const dateStr = fmtDateTH(d.assessedAt || new Date());
+    const printHeaderHTML = `
+      <div class="print-header no-screen">
+        <div class="ph-logo"><img src="${BSR_LOGO_URI}" alt="Bangkok Hospital Surat"></div>
+        <div class="ph-brand">
+          <p class="hosp">${CONFIG.HOSPITAL_NAME}</p>
+          <p class="doctitle">ผลการประเมินความจำเป็นในการพบแพทย์ (Menopause Check)<br>
+            <span style="font-size:12px;color:var(--muted);font-weight:400">BSR Menopause Check — Service Need Triage · ไม่ใช่การวินิจฉัย</span></p>
+        </div>
+        <div class="ph-meta">
+          <div><b>วันที่ประเมิน</b><br>${dateStr}</div>
+          <div style="margin-top:6px"><b>เลขที่รายงาน</b><br>${d.assessmentId}</div>
+        </div>
+      </div>`;
+
+    const printContactHTML = `
+      <div class="print-contact no-screen">
+        <b>ติดต่อ ${CONFIG.HOSPITAL_NAME}</b><br>
+        📞 โทร <b>${CONFIG.PHONE}</b> &nbsp;·&nbsp; 💬 LINE Official: <b>@bangkoksurat</b>
+        <br><span style="font-size:12px;color:var(--muted)">เลขที่รายงาน: <b>${d.assessmentId}</b> — โปรดนำรายงานนี้ไปด้วยเมื่อมาปรึกษาแพทย์</span>
+      </div>`;
+
+    const printFooterHTML = `
+      <div class="print-footer no-screen">
+        <b>ข้อจำกัดของรายงาน:</b> รายงานนี้เป็นการประเมินความเร่งด่วนจากข้อมูลที่ท่านกรอกเอง <u>ไม่ใช่การวินิจฉัยโรค</u>
+        และ <u>ไม่สรุปได้ว่าควรหรือไม่ควรใช้ฮอร์โมน</u> การตัดสินใจใช้ฮอร์โมนต้องเป็น shared decision-making หลังประเมินประวัติและข้อห้ามโดยแพทย์ (NAMS 2022)<br>
+        <b>เกณฑ์อ้างอิง:</b> ${GUIDELINE_VERSION} · ทบทวนล่าสุด ${LAST_REVIEW_DATE}<br>
+        <b>หมายเหตุ:</b> คะแนน 0-40 และจุดตัดที่ใช้ในเอกสารนี้เป็น <b>operational hypothesis สำหรับ pilot</b> ยังไม่ผ่าน external validation<br>
+        © ${(new Date()).getFullYear()} ${CONFIG.HOSPITAL_NAME} · เลขที่รายงาน ${d.assessmentId}
+      </div>`;
+
+    // ---- Result body ----
+    const reasonsHTML = d.reasons.map(r => `<li>${r}</li>`).join('');
+    const modulesHTML = d.modules.length
+      ? `<ul class="clean">${d.modules.map(x => `<li>${x}</li>`).join('')}</ul>`
+      : '<p class="muted-row">ไม่มี service module เพิ่มเติมจากคำตอบของคุณ</p>';
+    const pathwaysHTML = d.pathways && d.pathways.length
+      ? `<ul class="clean">${d.pathways.map(x => `<li class="warn"><b>${x}</b></li>`).join('')}</ul>`
+      : '';
+    const selfCareHTML = d.selfCare.length
+      ? `<ul class="clean">${d.selfCare.map(x => `<li>${x}</li>`).join('')}</ul>`
+      : '';
+
+    // Level-specific message (per §7 patient result messages)
+    const levelMessage = {
+      red: `<div class="pt-conc" style="background:#fbe5e7;border-color:#f0b6a6;color:#7a1220">
+        <b>คำแนะนำ:</b> คำตอบของคุณพบอาการที่ควรได้รับการประเมินโดยบุคลากรทางการแพทย์เร็ว
+        อาการนี้ <u>ไม่ได้หมายความว่าคุณเป็นโรคร้ายแรง</u> แต่ไม่ควรรอจากคะแนนแบบประเมิน
+        <br><br><b>⛔ หากมีเจ็บหน้าอก หายใจลำบาก หมดสติ แขนขาอ่อนแรง หรือคิดทำร้ายตนเอง โปรดโทร 1669 หรือไปห้องฉุกเฉินทันที</b>
+      </div>`,
+      orange: `<div class="pt-conc" style="background:#fbe5e7;border-color:#f0b6a6;color:#7a1220">
+        <b>คำแนะนำ:</b> อาการหรือปัจจัยเสี่ยงของคุณควรได้รับการประเมินโดยแพทย์ในช่วงใกล้ ๆ นี้
+        เพื่อค้นหาสาเหตุ ประเมินความเสี่ยง และร่วมเลือกวิธีดูแลที่เหมาะสม
+        <br><br><b>⚠️ แบบประเมินนี้ยังไม่สามารถสรุปว่าคุณควรหรือไม่ควรใช้ฮอร์โมนได้</b>
+      </div>`,
+      yellow: `<div class="pt-conc" style="background:#fbf2dd;border-color:#f0d9a6;color:#8a5c10">
+        <b>คำแนะนำ:</b> คุณมีอาการที่อาจสัมพันธ์กับช่วงเปลี่ยนผ่านวัยทองและเริ่มกระทบคุณภาพชีวิต
+        <br>มีทั้งทางเลือกใช้ฮอร์โมนและไม่ใช้ฮอร์โมนขึ้นกับอาการ ประวัติสุขภาพ และความต้องการ
+        <br>คุณสามารถนัดประเมินภายใน 2-4 สัปดาห์ พร้อมจดอาการและรอบเดือนก่อนมา
+      </div>`,
+      green: `<div class="pt-conc">
+        <b>คำแนะนำ:</b> ขณะนี้ยังไม่พบสัญญาณที่ต้องเร่งนัดจากคำตอบของคุณ
+        แนะนำการดูแลตนเองด้านล่าง และประเมินซ้ำใน 6-8 สัปดาห์
+        <br><br>หากอาการเพิ่มขึ้น กระทบชีวิต หรือคุณกังวล <b>สามารถนัดแพทย์ได้เสมอโดยไม่ต้องรอคะแนนสูง</b>
+      </div>`,
+    }[d.level];
+
+    $('result').innerHTML = `
+      ${printHeaderHTML}
+
+      <div class="save-reminder no-print"><b>💾 อย่าลืม:</b> ระบบไม่บันทึกผลให้ — กดปุ่ม <b>"พิมพ์/PDF"</b> ด้านล่างก่อนปิดเบราว์เซอร์ มิฉะนั้นข้อมูลจะหาย</div>
+
+      <div class="res-banner ${m.c}">
+        <p class="lvl">${m.e}</p>
+        <p class="lvl-big">${m.ico} ${m.t}</p>
+        <p><b>กรอบเวลาที่แนะนำ:</b> ${d.timeframe}</p>
+        <div class="ref-id">เลขที่รายงาน: ${d.assessmentId}</div>
+      </div>
+
+      ${patientSummaryHTML}
+
+      <div class="card">
+        <div class="res-block">
+          <h3>เหตุผลของระดับที่ได้</h3>
+          <ul class="clean">${reasonsHTML}</ul>
+        </div>
+
+        ${pathwaysHTML ? `<div class="res-block">
+          <h3>เส้นทางบริการที่แนะนำ (Red Flag)</h3>
+          ${pathwaysHTML}
+        </div>` : ''}
+
+        <div class="res-block">
+          <h3>โมดูลบริการที่เกี่ยวข้อง</h3>
+          ${modulesHTML}
+        </div>
+
+        ${selfCareHTML ? `<div class="res-block">
+          <h3>การดูแลตนเองระหว่างรอ</h3>
+          ${selfCareHTML}
+        </div>` : ''}
+
+        ${levelMessage}
+      </div>
+
+      ${(d.level === 'red' || d.level === 'orange') ? `
+      <div class="contact-card">
+        <h3>ปรึกษาแพทย์ / นัดหมาย</h3>
+        <p style="opacity:.95;font-size:14px;margin:0 0 14px">${d.level === 'red' ? 'ผลประเมินพบสัญญาณที่ควรได้รับการดูแลเร่งด่วน' : 'ผลประเมินพบความเร่งด่วนที่ควรได้รับการดูแล'}</p>
+        <div class="contact-btns">
+          <a class="cbtn call" href="tel:${CONFIG.PHONE_TEL}">📞 โทร ${CONFIG.PHONE}</a>
+          <a class="cbtn line" href="${CONFIG.LINE_URL}" target="_blank" rel="noopener">💬 สอบถามผ่าน LINE</a>
+        </div>
+        <p style="font-size:12.5px;opacity:.85;margin:14px 0 0">เลขที่รายงาน: <b>${d.assessmentId}</b> — โปรดแจ้งเลขนี้กับเจ้าหน้าที่เพื่อความรวดเร็ว</p>
+      </div>` : `
+      <div class="contact-soft">มีคำถามเพิ่มเติม? ติดต่อ ${CONFIG.HOSPITAL_NAME} · โทร <b style="color:var(--teal)">${CONFIG.PHONE}</b> · <a href="${CONFIG.LINE_URL}" target="_blank" rel="noopener" style="color:#06c755;font-weight:600;text-decoration:none">LINE</a></div>`}
+
+      ${printContactHTML}
+      ${printFooterHTML}
+
+      <div class="btn-row no-print">
+        <button type="button" class="btn-primary" onclick="sharePDF()" id="sharePdfBtn">📤 แชร์ PDF ผ่าน LINE</button>
+        <button type="button" class="btn-ghost" onclick="printReport()">🖨️ พิมพ์ / บันทึกเป็น PDF</button>
+        <button type="button" class="btn-ghost" onclick="resetForm()">ประเมินรายใหม่</button>
+      </div>`;
+    $('result').style.display = 'block';
+    $('result').scrollIntoView({behavior:'smooth'});
+  }
+
+  // Attach logo + build dynamic UI after DOM ready
+  document.addEventListener('DOMContentLoaded', function(){
+    var el = $('brandLogo'); if (el) el.src = BSR_LOGO_URI;
+    buildSymptomInputs();
+    attachRedFlagWatcher();
+  });
+</script>
+</body>
+</html>
